@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -9,13 +10,21 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
-import { object } from "better-auth";
+import { email, object } from "better-auth";
 
-const onSubmit = (e) => {
+const onSubmit = async (e) => {
   e.preventDefault();
   const fromData=new FormData(e.currentTarget)
-  const data=Object.fromEntries(fromData.entries())
-  console.log(data)
+  const UserData=Object.fromEntries(fromData.entries())
+  console.log(UserData)
+  
+  const {data,error }= await authClient.signUp.email({
+    name:UserData.name,
+    email:UserData.email,
+    password:UserData.password,
+    callbackURL: '/'
+  })
+  console.log(data,error)
   
 };
 
